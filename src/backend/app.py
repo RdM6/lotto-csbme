@@ -26,15 +26,8 @@ def hello_world():
 def signup():
     email = request.json['email']
     password = request.json['password']
-    print("Request json:", request.json)
-
-    print("Request json names:", request.json["first_name"], request.json["last_name"])
-    if hasattr(request.json, "first_name") and hasattr(request.json, "last_name"):
-        first_name = request.json["first_name"]
-        last_name = request.json["last_name"]
-    else:
-        first_name = None
-        last_name = None
+    first_name = request.json["first_name"]
+    last_name = request.json["last_name"]
 
     user_exists = User.query.filter_by(email=email).first() is not None
 
