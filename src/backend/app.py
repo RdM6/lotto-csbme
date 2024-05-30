@@ -17,11 +17,6 @@ with app.app_context():
     db.create_all()
 
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
-
-
 @app.route("/signup", methods=['POST'])
 def signup():
     email = request.json['email']
