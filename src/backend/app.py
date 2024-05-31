@@ -2,18 +2,16 @@ from flask import Flask, jsonify, request, session
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 import sqlite3
+
+from config import ApplicationConfig
 from db_models import db, User, GameNumbers
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = "secret_key"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_ECHO = True
-
+app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
 CORS(app)
+
 db.init_app(app)
 
 with app.app_context():
