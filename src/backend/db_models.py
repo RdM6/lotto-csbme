@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from uuid import uuid4
+from game import GameWinningNumbers
 
 db = SQLAlchemy()
 
@@ -13,6 +14,10 @@ class User(db.Model):
     id = db.Column(db.String(16), primary_key=True, unique=True, default=get_uuid)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    first_name = db.Column(db.String(120), nullable=True)
-    last_name = db.Column(db.String(120), nullable=True)
 
+
+class GameNumbers(db.Model):
+    __tablename__ = "game_numbers"
+    id = db.Column(db.String(16), primary_key=True, unique=True, default=get_uuid)
+    winning_numbers = db.Column(db.String(120), nullable=False, default=GameWinningNumbers.create_winning_numbers())
+    winning_super_number = db.Column(db.Integer, nullable=False, default=GameWinningNumbers.create_winning_super_number())

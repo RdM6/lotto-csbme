@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, session
 from flask_bcrypt import Bcrypt
-from db_models import db, User
+from flask_cors import CORS
+from db_models import db, User, GameNumbers
 
 app = Flask(__name__)
 
@@ -11,6 +12,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = True
 
 bcrypt = Bcrypt(app)
+CORS(app)
 db.init_app(app)
 
 with app.app_context():
@@ -21,8 +23,6 @@ with app.app_context():
 def signup():
     email = request.json['email']
     password = request.json['password']
-    first_name = request.json["first_name"]
-    last_name = request.json["last_name"]
 
     user_exists = User.query.filter_by(email=email).first() is not None
 
@@ -30,7 +30,7 @@ def signup():
         return jsonify({'error': 'Email already registered'}), 409
     else:
         hashed_password = bcrypt.generate_password_hash(password)
-        new_user = User(email=email, password=hashed_password, first_name=first_name, last_name=last_name)
+        new_user = User(email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         session["user_id"] = new_user.id
@@ -60,6 +60,36 @@ def login():
         "id": user.id,
         "email": user.email
     })
+
+
+@app.route("/game", methods=["POST"])
+def game():
+    player_input_numbers = request.json["player_input_numbers"]
+    player_input_super_number = request.json["player_input_super_number"]
+
+    new_game_winning_numbers = GameNumbers()
+    db.session.add(new_game_winning_numbers)
+    db.session.commit()
+    session["game_numbers_id"] = new_game_winning_numbers.id
+
+    game_numbers_exists = GameNumbers.query.filter_by()
+    print("game_numbers_exists:", game_numbers_exists)
+
+    if game_numbers_exists:
+        game_winning_numbers = GameNumbers.query.filter_by(winning_numbers=player_input_numbers).first()
+        game_winning_super_number = GameNumbers.query.filter_by(winning_super_number=player_input_super_number).first()
+        if game_winning_numbers and game_winning_super_number:
+            return jsonify({
+                "Result": "Jackpot"
+            })
+        elif game_winning_numbers:
+            return jsonify({
+                "Result": "Win"
+            })
+        else:
+            return jsonify({
+                "Result": "Lost"
+            })
 
 
 if __name__ == "__main__":
