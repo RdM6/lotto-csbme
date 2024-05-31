@@ -26,10 +26,6 @@ export default function RegisterPage(){
         });
     };
 
-    let imgs = [
-      'https://as2.ftcdn.net/v2/jpg/03/39/70/91/1000_F_339709132_H9HSSTtTmayePcbARkTSB2qoZTubJ6bR.jpg',
-    ];
-
   return (
     <div>
         <div className="container h-100">
@@ -70,7 +66,7 @@ export default function RegisterPage(){
                 </form>
               </div>
               <div className="col-md-9 col-lg-6 col-xl-5">
-                <img src={imgs[0]} className="img-fluid"/>
+                <img src={process.env.PUBLIC_URL + "/signup.png"} className="img-fluid"/>
               </div>
             </div>
           </div>
