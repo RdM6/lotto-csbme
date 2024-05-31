@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, session
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+import sqlite3
 from db_models import db, User, GameNumbers
 
 app = Flask(__name__)
@@ -67,13 +68,31 @@ def game():
     player_input_numbers = request.json["player_input_numbers"]
     player_input_super_number = request.json["player_input_super_number"]
 
-    new_game_winning_numbers = GameNumbers()
-    db.session.add(new_game_winning_numbers)
-    db.session.commit()
-    session["game_numbers_id"] = new_game_winning_numbers.id
+    # Connect to the SQLite database
+    conn = sqlite3.connect('./instance/database.db')
+    cursor = conn.cursor()
+
+    # Execute the query
+    cursor.execute("SELECT COUNT(*) FROM game_numbers")
+
+    # Fetch the result
+    row_count = cursor.fetchone()[0]
+
+    # Check if the table has rows
+    if row_count > 0:
+        print("The table has rows.")
+    else:
+        print("The table is empty.")
+        print("Creating a new row.")
+        new_game_winning_numbers = GameNumbers()
+        db.session.add(new_game_winning_numbers)
+        db.session.commit()
+        session["game_numbers_id"] = new_game_winning_numbers.id
+
+    # Close the connection
+    conn.close()
 
     game_numbers_exists = GameNumbers.query.filter_by()
-    print("game_numbers_exists:", game_numbers_exists)
 
     if game_numbers_exists:
         game_winning_numbers = GameNumbers.query.filter_by(winning_numbers=player_input_numbers).first()
