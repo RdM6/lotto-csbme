@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from 'axios';
 import {useNavigate} from "react-router-dom";
+import httpClient from "../httpClient";
 
 export default function LoginPage(){
 
@@ -9,7 +9,7 @@ export default function LoginPage(){
 
     const navigate = useNavigate();
 
-    const logInUser = () => {
+    const logInUser = async () => {
         if(email.length === 0){
           alert("Email has left Blank!");
         }
@@ -17,14 +17,14 @@ export default function LoginPage(){
           alert("password has left Blank!");
         }
         else{
-            axios.post('http://127.0.0.1:5000/login', {
+            const resp = await httpClient.post('//localhost:5000/login', {
                 email: email,
                 password: password
             })
             .then(function (response) {
                 console.log(response);
                 //console.log(response.data);
-                navigate("/game");
+                navigate("/");
             })
             .catch(function (error) {
                 console.log(error, 'error');
@@ -41,7 +41,7 @@ export default function LoginPage(){
           <div className="container-fluid h-custom">
             <div className="row d-flex justify-content-center align-items-center h-100">
               <div className="col-md-9 col-lg-6 col-xl-5">
-                <img src={process.env.PUBLIC_URL + "/login.png"} className="img-fluid"/>
+                <img src={process.env.PUBLIC_URL + "/login.png"} alt={"login"} className="img-fluid"/>
               </div>
               <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                 <form>
@@ -51,19 +51,19 @@ export default function LoginPage(){
 
                   <div className="form-outline mb-4">
                     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} id="form3Example3" className="form-control form-control-lg" placeholder="Enter a valid email address" />
-                    <label className="form-label" for="form3Example3">Email address</label>
+                    <label className="form-label" htmlFor="form3Example3">Email address</label>
                   </div>
 
 
                   <div className="form-outline mb-3">
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} id="form3Example4" className="form-control form-control-lg" placeholder="Enter password" />
-                    <label className="form-label" for="form3Example4">Password</label>
+                    <label className="form-label" htmlFor="form3Example4">Password</label>
                   </div>
 
                   <div className="d-flex justify-content-between align-items-center">
                     <div className="form-check mb-0">
                       <input className="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                      <label className="form-check-label" for="form2Example3">
+                      <label className="form-check-label" htmlFor="form2Example3">
                         Remember me
                       </label>
                     </div>

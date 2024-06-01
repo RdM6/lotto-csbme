@@ -1,7 +1,8 @@
 import sqlite3
 from flask import Flask, jsonify, request, session
+from flask_session import Session
 from flask_bcrypt import Bcrypt
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from config import ApplicationConfig
 from db_models import db, User, GameNumbers
 
@@ -10,7 +11,8 @@ app = Flask(__name__)
 
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
-CORS(app)
+server_session = Session(app)
+CORS(app, supports_credentials=True)
 
 db.init_app(app)
 
@@ -27,12 +29,12 @@ def signup():
 
     if user_exists:
         return jsonify({'error': 'Email already registered'}), 409
-    else:
-        hashed_password = bcrypt.generate_password_hash(password)
-        new_user = User(email=email, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-        session["user_id"] = new_user.id
+
+    hashed_password = bcrypt.generate_password_hash(password)
+    new_user = User(email=email, password=hashed_password)
+    db.session.add(new_user)
+    db.session.commit()
+    session["user_id"] = new_user.id
 
     return jsonify({
         "id": new_user.id,
@@ -61,8 +63,37 @@ def login():
     })
 
 
+@app.route("/@me")
+def get_current_user():
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({
+            "Error": "Unauthorized"
+        }), 401
+
+    user = User.query.filter_by(id=user_id).first()
+    return jsonify({
+        "id": user.id,
+        "email": user.email,
+    })
+
+
+@app.route("/logout", methods=["POST"])
+def logout_user():
+    session.pop("user_id")
+    return "200"
+
+
 @app.route("/game", methods=["POST"])
 def game():
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({
+            "Error": "Unauthorized"
+        }), 401
+
     player_input_numbers = request.json["player_input_numbers"]
     player_input_super_number = request.json["player_input_super_number"]
 
