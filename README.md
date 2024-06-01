@@ -12,7 +12,7 @@ As an example we will use Homebrew install method:
     - https://brew.sh/
 2. After the installation check the version via terminal with this command:
     - brew -v
-3. Then execute this command in terminal: 
+3. Then execute this command in the terminal: 
    - brew install pdm
 4. Check the version of PDM with this command:
    - pdm --version
@@ -20,6 +20,7 @@ As an example we will use Homebrew install method:
 If everything went well, you should be good to go for the next step.
 
 ### Set up your virtual env. for the project
+
 After cloning the repository you must create a new branch:
 
 - git checkout -b NAME_OF_YOUR_NEW_BRANCH
@@ -30,15 +31,17 @@ Then execute this command:
 
 ### Important! You must be always on the root directory of the project, before executing pdm commands!
 
-Afterward you need to change your interpreter to /lotto-csbme/.venv/Scripts/python.exe
+Afterward you need to change your interpreter to ./lotto-csbme/.venv/Scripts/python.exe
 
-Then you should execute following commands:
+Then you should execute the following command:
 - pdm sync
 
 That should be it. You should be able to work with all the dependencies, which are needed for this project.
 
 ## Now you need to install nvm, Node.js and npm, which are needed for the frontend development
+
 Here are official nvm, npm documentations with installation guides:
+
 - https://github.com/nvm-sh/nvm
 - https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
@@ -47,7 +50,7 @@ As an example we will use Homebrew install method:
     - https://brew.sh/
 2. After the installation check the version via terminal with this command:
     - brew -v
-3. Then execute this command in terminal: 
+3. Then execute this command in the terminal: 
    - brew install nvm
 4. Check the version of nvm with this command:
    - nvm --version
@@ -63,6 +66,7 @@ If you have some difficulties, try to use some methods from that topic:
 - https://stackoverflow.com/questions/33575082/brew-install-npm-npm-command-not-found
 
 ## How to start the local backend development server 
+
 You need to change to the backend directory of the project, which is ./lotto-csbme/src/backend . 
 Then execute this command:
    - flask run --debug
@@ -76,6 +80,7 @@ Postman allows you to test the API with POST, GET, etc. requests.
 It is really useful, highly recommend to try it out!
 
 ## How to start the local frontend development server
+
 You need to change to the frontend directory of the project, which is ./lotto-csbme/src/frontend . 
 Then execute this command:
    - npm start
@@ -84,7 +89,7 @@ It will start a local development server on your machine with the default addres
 
 It is possible that you will be asked if you want to use another address, because your port 3000 might be already in use.
 
-Now you should be able to navigate through the frontend in the browser and test things out. 
+After that you should be able to navigate through the frontend in the browser and test things out. 
 
-### Important! You should start the local backend development server as well, if you really want to test the whole project, as it might need the backend logic to properly work.
+### Important! You should start the local backend development server as well, if you really want to test the whole project out, as the frontend might need the backend logic to properly work.
 

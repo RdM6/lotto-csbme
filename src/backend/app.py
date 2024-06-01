@@ -5,6 +5,7 @@ from flask_cors import CORS
 from config import ApplicationConfig
 from db_models import db, User, GameNumbers
 
+
 app = Flask(__name__)
 
 app.config.from_object(ApplicationConfig)
