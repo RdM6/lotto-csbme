@@ -8,13 +8,13 @@ Hier wird eine Datenbank erzeugt und zur db Variable zugewiesen.
 db = SQLAlchemy()
 
 """
-Funktion für die Hash-Erzeugung, die dann bei der Erzeugung von den IDs gebraucht wird.
+Hier wird ein Universally unique identifier erzeugt und als default bei den Tabellen eingesetzt.
 """
 def get_uuid():
     return uuid4().hex
 
 """
-Hier werden die Datenbank-Tabelle wie "users", "game_numbers" und "user_game_numbers" erstellt.
+Hier werden die Datenbank-Tabellen-Modelle, wie "users", "game_numbers" und "user_game_numbers", erstellt.
 """
 class User(db.Model):
     __tablename__ = 'users'

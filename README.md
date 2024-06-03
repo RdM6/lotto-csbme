@@ -72,6 +72,8 @@ If you have some difficulties, try to use some methods from that topic:
 You need to change to the backend directory of the project, which is ./lotto-csbme/src/backend . 
 Then execute this command:
    - flask run --debug
+   - or 
+   - python app.py
 
 It will start a local development server on your machine with the default address http://127.0.0.1:5000
 

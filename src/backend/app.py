@@ -15,12 +15,11 @@ Hier werden die benötigten Configs von der config.py mitgegeben.
 """
 app.config.from_object(ApplicationConfig)
 """
-Bcrypt ermöglicht es die Passwörter von Nutzern mit den gespeicherten Hash-Werten in der Datenbank zu vergleichen,
-um zu kontrollieren, ob der eingegebene Passwort sich mit dem Hash-Wert übereinstimmt.
+Bcrypt ermöglicht es die Passwörter von Nutzern zu hashen.
 """
 bcrypt = Bcrypt(app)
 """
-Es ermöglicht mit Hilfe von Redis und der Flask-Session eine Server-sided-Session zu erzeugen.
+Eine Server-sided Session wird erzeugt.
 """
 server_session = Session(app)
 """
@@ -28,7 +27,8 @@ Ist für die CORS-Fehlerbehebung da.
 """
 CORS(app, supports_credentials=True)
 """
-Hier wird die Datenbank initial erzeugt, bei dem App-Start.
+Hier wird die Datenbank initial erzeugt, bei dem App-Start. 
+Nach dem Start muss der Verzeichnis instance mit der SQLite Datenbank auftauchen.
 """
 db.init_app(app)
 
@@ -36,7 +36,7 @@ with app.app_context():
     db.create_all()
 
 """
-Hier wird ein /signup Route mit den POST-Methods erzeugt. 
+Hier wird eine /signup Route mit dem POST-Method erzeugt. 
 Hier wird ein User registriert und die Daten werden in der Datenbank gespeichert.
 """
 @app.route("/signup", methods=['POST'])
@@ -63,7 +63,7 @@ def signup():
 
 
 """
-Hier wird ein /login Route mit den POST-Methods erzeugt. 
+Hier wird eine /login Route mit dem POST-Method erzeugt. 
 Hier wird ein User eingeloggt und die Daten werden mit der Datenbank validiert.
 """
 @app.route("/login", methods=['POST'])
@@ -88,7 +88,7 @@ def login():
     })
 
 """
-Hier wird ein /@me Route erzeugt. 
+Hier wird eine /@me Route erzeugt. 
 Damit kann man sehen, welcher User sich gerade in der Session befindet.
 """
 @app.route("/@me")
@@ -107,7 +107,7 @@ def get_current_user():
     })
 
 """
-Hier wird ein /logout Route mit den POST-Methods erzeugt. 
+Hier wird eine /logout Route mit dem POST-Method erzeugt. 
 Hier wird der User ausgeloggt.
 """
 @app.route("/logout", methods=["POST"])
@@ -116,10 +116,10 @@ def logout_user():
     return "200"
 
 """
-Hier wird ein /game Route mit den POST-Methods erzeugt. 
-Hier befindet sich das eigentliche Spiel. Die Route kriegt die eigegebenen Zahlen von dem User 
-aus dem Frontend zugeschickt und validiert diese mit der Datenbank und schickt den Resultat des Spiels
-an den Frontend zurück. Die Zahlen die Spieler eingegeben hat werden dann in der DB gespeichert.
+Hier wird eine /game Route mit dem POST-Method erzeugt. 
+Die Route kriegt die eingegebenen Zahlen von dem User 
+aus dem Frontend zugeschickt und validiert diese mit der Datenbank, und schickt den Resultat des Spiels
+an den Frontend zurück. Die Zahlen, die Spieler eingegeben hat, und der Resultat werden dann in der DB gespeichert.
 """
 @app.route("/game", methods=["POST"])
 def game():
