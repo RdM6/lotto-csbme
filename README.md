@@ -36,6 +36,8 @@ Afterward you need to change your interpreter to ./lotto-csbme/.venv/Scripts/pyt
 Then you should execute the following command:
 - pdm sync
 
+Also, the .env file with a SECRET_VALUE= should be created in the root directory.
+
 That should be it. You should be able to work with all the dependencies, which are needed for this project.
 
 ## Now you need to install nvm, Node.js and npm, which are needed for the frontend development
