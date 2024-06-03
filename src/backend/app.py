@@ -2,7 +2,7 @@ import sqlite3
 from flask import Flask, jsonify, request, session
 from flask_session import Session
 from flask_bcrypt import Bcrypt
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from config import ApplicationConfig
 from db_models import db, User, GameNumbers, UserGameStats
 
