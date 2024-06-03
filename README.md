@@ -19,7 +19,7 @@ As an example we will use Homebrew install method:
 
 If everything went well, you should be good to go for the next step.
 
-### Set up your virtual env. for the project
+### Set up your virtual environment for the project
 
 After cloning the repository you must create a new branch:
 
@@ -36,7 +36,7 @@ Afterward you need to change your interpreter to ./lotto-csbme/.venv/Scripts/pyt
 Then you should execute the following command:
 - pdm sync
 
-Also, the .env file with a SECRET_VALUE= should be created in the root directory.
+### Important! The .env file with a SECRET_KEY=Gq(0ISVBQOzMPUHVF>tJoVe-a3RDP; in it must be created in the root directory.
 
 That should be it. You should be able to work with all the dependencies, which are needed for this project.
 

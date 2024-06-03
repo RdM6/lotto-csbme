@@ -5,7 +5,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
+"""
+Hier werden die benötigten Konfigurationen für die App erstellt.
+"""
 class ApplicationConfig:
     SECRET_KEY = os.environ["SECRET_KEY"]
 

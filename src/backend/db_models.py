@@ -2,13 +2,20 @@ from flask_sqlalchemy import SQLAlchemy
 from uuid import uuid4
 from game import GameWinningNumbers
 
+"""
+Hier wird eine Datenbank erzeugt und zur db Variable zugewiesen.
+"""
 db = SQLAlchemy()
 
-
+"""
+Funktion für die Hash-Erzeugung, die dann bei der Erzeugung von den IDs gebraucht wird.
+"""
 def get_uuid():
     return uuid4().hex
 
-
+"""
+Hier werden die Datenbank-Tabelle wie "users", "game_numbers" und "user_game_numbers" erstellt.
+"""
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.String(16), primary_key=True, unique=True, default=get_uuid)
