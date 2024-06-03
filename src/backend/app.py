@@ -4,7 +4,7 @@ from flask_session import Session
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS, cross_origin
 from config import ApplicationConfig
-from db_models import db, User, GameNumbers
+from db_models import db, User, GameNumbers, UserGameStats
 
 
 app = Flask(__name__)
@@ -35,6 +35,7 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
     session["user_id"] = new_user.id
+    session["user_email"] = new_user.email
 
     return jsonify({
         "id": new_user.id,
@@ -56,6 +57,7 @@ def login():
         return jsonify({"Error": "Unauthorized."}), 401
 
     session["user_id"] = user.id
+    session["user_email"] = user.email
 
     return jsonify({
         "id": user.id,
@@ -88,6 +90,7 @@ def logout_user():
 @app.route("/game", methods=["POST"])
 def game():
     user_id = session.get("user_id")
+    user_email = session.get("user_email")
 
     if not user_id:
         return jsonify({
@@ -117,6 +120,8 @@ def game():
         db.session.add(new_game_winning_numbers)
         db.session.commit()
         session["game_numbers_id"] = new_game_winning_numbers.id
+        session["game_winning_numbers"] = new_game_winning_numbers.winning_numbers
+        session["game_winning_super_number"] = new_game_winning_numbers.winning_super_number
 
     # Close the connection
     conn.close()
@@ -127,14 +132,42 @@ def game():
         game_winning_numbers = GameNumbers.query.filter_by(winning_numbers=player_input_numbers).first()
         game_winning_super_number = GameNumbers.query.filter_by(winning_super_number=player_input_super_number).first()
         if game_winning_numbers and game_winning_super_number:
+            game_result = "Jackpot"
+            new_user_game_stats = UserGameStats(email=user_email,
+                                                status=game_result,
+                                                player_input_numbers=player_input_numbers,
+                                                player_input_super_number=player_input_super_number
+                                                )
+            db.session.add(new_user_game_stats)
+            db.session.commit()
+            session["user_game_stats"] = new_user_game_stats.id
             return jsonify({
                 "Result": "Jackpot"
             })
         elif game_winning_numbers:
+            game_result = "Win"
+            new_user_game_stats = UserGameStats(email=user_email,
+                                                status=game_result,
+                                                player_input_numbers=player_input_numbers,
+                                                player_input_super_number=player_input_super_number
+                                                )
+            db.session.add(new_user_game_stats)
+            db.session.commit()
+            session["user_game_stats"] = new_user_game_stats.id
             return jsonify({
                 "Result": "Win"
             })
         else:
+            game_result = "Lost"
+            new_user_game_stats = UserGameStats(email=user_email,
+                                                result=game_result,
+                                                player_input_numbers=player_input_numbers,
+                                                player_input_super_number=player_input_super_number
+                                                )
+            print("new_user_game_stats:", new_user_game_stats.id)
+            db.session.add(new_user_game_stats)
+            db.session.commit()
+            session["user_game_stats"] = new_user_game_stats.id
             return jsonify({
                 "Result": "Lost"
             })
