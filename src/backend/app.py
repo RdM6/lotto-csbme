@@ -134,7 +134,7 @@ def game():
         if game_winning_numbers and game_winning_super_number:
             game_result = "Jackpot"
             new_user_game_stats = UserGameStats(email=user_email,
-                                                status=game_result,
+                                                result=game_result,
                                                 player_input_numbers=player_input_numbers,
                                                 player_input_super_number=player_input_super_number
                                                 )
@@ -147,7 +147,7 @@ def game():
         elif game_winning_numbers:
             game_result = "Win"
             new_user_game_stats = UserGameStats(email=user_email,
-                                                status=game_result,
+                                                result=game_result,
                                                 player_input_numbers=player_input_numbers,
                                                 player_input_super_number=player_input_super_number
                                                 )
