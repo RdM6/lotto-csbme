@@ -5,11 +5,171 @@ description = "Default template for PDM package"
 authors = [
     {name = "", email = ""},
 ]
-dependencies = []
-requires-python = ">=3.9.*"
-readme = "README.md"
-license = {text = "MIT"}
 
+# Deployment dependencies and packages
+dependencies = [
+    "flask>=3.0.3",
+    "flask-sqlalchemy>=3.1.1",
+    "flask-cors>=4.0.1",
+    "flask-bcrypt>=1.0.1",
+    "python-dotenv>=1.0.1",
+    "redis>=5.0.4",
+    "flask-session>=0.8.0",
+]
 
+requires-python = ">=3.9"
+license = {text = "For educational use only"}
+
+[project.optional-dependencies]
+layer = [
+    "pydantic>=2.0"
+]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool]
 [tool.pdm]
-distribution = false
+[tool.pdm.dev-dependencies]
+# Dependencies for local development
+dev = [
+    "black>=23.3.0",
+    "isort>=5.11.4",
+    "mypy>=1.3.0",
+    "pre-commit>=3.0.0",
+    "pydantic>=2.3.0",
+    "pyyaml>6.0",
+    "ruff>=0.0.263",
+]
+
+# Dependencies important for testing
+testing = [
+    "faker>=14.1.0",
+    "polyfactory>=2.0",
+    "pydantic-factories>=1.5.4",
+    "pytest>=7.1.2",
+    "pytest-cov>=4.0",
+]
+
+[tool.pdm.scripts]
+# linting
+black = "black ."
+isort = "ruff check . --fix I"
+format = { composite = ["black", "isort"] }
+ruff = "ruff check"
+lint = { composite = ["black", "isort", "ruff"] }
+
+# don't touch me
+_.env_file = ".env"
+
+integration-tests-local.cmd = "pytest -vv tests/integration"
+# integration-tests-local.env = {}
+
+unit-tests = "pytest -vv tests/unit"
+integration-tests.cmd = "pytest -vv tests/integration"
+tests = { composite = ["unit-tests", "integration-tests"] }
+
+install-all = { composite = ["pdm lock -G:all", "pdm sync -G:all"]}
+lock-deps = "pdm lock -G default -G dev -G testing"
+
+sync-setup = "pdm sync -G:all"
+
+[[tool.pdm.source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+### Static Linting Settings
+[tool.black]
+target-version = ['py39']
+line-length = 120
+force-exclude = ''''''
+
+[tool.ruff]
+select = [
+    "A",     # flake8-builtins https://beta.ruff.rs/docs/rules/#flake8-builtins-a
+    "ANN",   # flake8-annotation https://beta.ruff.rs/docs/rules/#flake8-annotations-ann
+    "ARG",   # flake8-unused-arguments https://beta.ruff.rs/docs/rules/#flake8-unused-arguments-arg
+    "B",     # flake8-bugbear https://beta.ruff.rs/docs/rules/#flake8-bugbear-b
+    "C4",    # flake8-comprehensions https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4
+    "C90",   # mccabe https://beta.ruff.rs/docs/rules/#mccabe-c90
+    "COM",   # flake8-commas https://beta.ruff.rs/docs/rules/#flake8-commas-com
+    "D",     # pydocstyle https://beta.ruff.rs/docs/rules/#pydocstyle-d
+    "E",     # Error https://beta.ruff.rs/docs/rules/#error-e
+    "ERA",   # eradicate https://beta.ruff.rs/docs/rules/#eradicate-era
+    "F",     # Pyflakes https://beta.ruff.rs/docs/rules/#pyflakes-f
+    "G",     # flake8-logging-format https://beta.ruff.rs/docs/rules/#flake8-logging-format-g
+    "I",     # isort https://beta.ruff.rs/docs/rules/#isort-i
+    "N",     # pep8-naming https://beta.ruff.rs/docs/rules/#pep8-naming-n
+    "PD",    # pandas-vet https://beta.ruff.rs/docs/rules/#pandas-vet-pd
+    "PIE",   # flake8-pie https://pypi.org/project/flake8-pie/
+    "PT",    # flake8-pytest-style https://beta.ruff.rs/docs/rules/#flake8-pytest-style-pt
+    "PTH",   # flake8-use-pathlib https://beta.ruff.rs/docs/rules/#flake8-use-pathlib-pth
+    "Q",     # flake8-quotes https://beta.ruff.rs/docs/rules/#flake8-quotes-q
+    "RET",   # flake8-return https://beta.ruff.rs/docs/rules/#flake8-return-ret
+    "RSE",   # flake8-raise https://beta.ruff.rs/docs/rules/#flake8-raise-rse
+    "S",     # flake8-bandit https://beta.ruff.rs/docs/rules/#flake8-bandit-s
+    "SIM",   # flake8-simplify https://beta.ruff.rs/docs/rules/#flake8-simplify-sim
+    "T20",   # flake8-print https://beta.ruff.rs/docs/rules/#flake8-print-t20
+    "TRY",   # tryceratops https://beta.ruff.rs/docs/rules/#tryceratops-try
+    "UP032", # pyupgrade https://beta.ruff.rs/docs/rules/#pyupgrade-up
+    "UP037", # pyupgrade https://beta.ruff.rs/docs/rules/#pyupgrade-up
+]
+line-length = 120
+target-version = "py39"
+ignore = [
+    "S101",
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+    "D401",
+    "D407",
+    "D406",
+    "ANN101",
+    "ANN102",
+    "ANN003",
+    "ANN204", # https://beta.ruff.rs/docs/rules/missing-return-type-special-method/
+    "PT001",
+    "PT002",
+    "PT013",  # https://beta.ruff.rs/docs/rules/#flake8-pytest-style-pt/
+    "G004",
+    "Q002",
+]
+fixable = ["I", "COM", "RSE", "E", "W", "G", "PT"]
+unfixable = ["B"]
+exclude = [
+    ".eggs",
+    ".git",
+    ".ruff_cache",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "build",
+    "dist",
+]
+
+[tool.ruff.flake8-quotes]
+inline-quotes = "double"
+docstring-quotes = "double"
+
+[tool.mypy]
+strict = true
+python_version = 3.9
+ignore_missing_imports = true
+exclude = "src/backend/models"
+
+
+[[tool.mypy.overrides]]
+module = "pydantic"
+ignore_missing_imports = true
+
+# Pytest Settings
+[tool.pytest.ini_options]
+addopts = "--cov=src/backend"
+pythonpath = [".", "src", "src/backend"]
